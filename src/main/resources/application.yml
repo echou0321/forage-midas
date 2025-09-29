@@ -1,7 +1,11 @@
 general:
   kafka-topic: midas-transactions
+incentive:
+  api-url: http://localhost:8080/incentive
 
 spring:
+  application:
+    name: midas-core
   kafka:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -27,6 +31,9 @@ spring:
   h2:
     console:
       enabled: true
+
+server:
+  port: 33400
 
 
 

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
+import com.jpmc.midascore.repository.UserRepository;
+import java.math.RoundingMode;
 
 @SpringBootTest
 @DirtiesContext
@@ -23,6 +25,9 @@ public class TaskFourTests {
     @Autowired
     private FileLoader fileLoader;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     void task_four_verifier() throws InterruptedException {
         userPopulator.populate();
@@ -32,6 +37,14 @@ public class TaskFourTests {
         }
         Thread.sleep(2000);
 
+
+        var wilbur = userRepository.findByName("wilbur");
+        if (wilbur != null) {
+            var floored = wilbur.getBalance().setScale(0, RoundingMode.FLOOR);
+            logger.info("WILBUR FINAL BALANCE (FLOORED): {}", floored);
+        } else {
+            logger.info("WILBUR NOT FOUND");
+        }
 
         logger.info("----------------------------------------------------------");
         logger.info("----------------------------------------------------------");

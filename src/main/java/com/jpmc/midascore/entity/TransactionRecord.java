@@ -25,6 +25,9 @@ public class TransactionRecord {
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal amount;
 
+    @Column(nullable = false, precision = 19, scale = 4)
+    private BigDecimal incentive = BigDecimal.ZERO;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
@@ -35,6 +38,9 @@ public class TransactionRecord {
         this.recipient = recipient;
         this.amount = amount;
     }
+
+    public void setIncentive(BigDecimal incentive) { this.incentive = incentive; }
+    public BigDecimal getIncentive() { return incentive; }
 
     public Long getId() { return id; }
     public UserRecord getSender() { return sender; }
