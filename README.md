@@ -1,5 +1,7 @@
 # Midas Core (JPMC ASE Forage)
 
+![EChou_JPMC_Cert](https://github.com/user-attachments/assets/82550629-c86b-485b-9432-15b53e664bdd)
+
 I built Midas Core as a small, resilient backend that simulates a real payment pipeline: consume transactions from Kafka, validate and apply them in a SQL database, enrich with an external incentives service, and expose a simple REST API for balances. I focused on correctness (money math), isolation of concerns, and an easy local developer experience.
 
 ## Why these choices
