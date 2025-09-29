@@ -29,29 +29,32 @@ public class TransactionService {
      */
     @Transactional
     public boolean process(Transaction incoming) {
-        // look up users by id (your repo defines a concrete findById(long) -> UserRecord)
-        UserRecord sender = userRepository.findById(incoming.getSenderId());
-        UserRecord recipient = userRepository.findById(incoming.getRecipientId());
+        // look up users by id (use Optional from repository)
+        java.util.Optional<UserRecord> senderOpt = userRepository.findById(incoming.getSenderId());
+        java.util.Optional<UserRecord> recipientOpt = userRepository.findById(incoming.getRecipientId());
 
-        if (sender == null || recipient == null) {
+        if (senderOpt.isEmpty() || recipientOpt.isEmpty()) {
             return false; // invalid ids
         }
 
-        float amount = incoming.getAmount();
-        if (sender.getBalance() < amount) {
+        UserRecord sender = senderOpt.get();
+        UserRecord recipient = recipientOpt.get();
+
+        java.math.BigDecimal amount = incoming.getAmount();
+        if (sender.getBalance().compareTo(amount) < 0) {
             return false; // insufficient funds
         }
 
         // apply balances
-        sender.setBalance(sender.getBalance() - amount);
-        recipient.setBalance(recipient.getBalance() + amount);
+        sender.setBalance(sender.getBalance().subtract(amount));
+        recipient.setBalance(recipient.getBalance().add(amount));
 
         // persist user updates
         userRepository.save(sender);
         userRepository.save(recipient);
 
         // record the transaction
-        TransactionRecord record = new TransactionRecord(sender, recipient, java.math.BigDecimal.valueOf(amount));
+        TransactionRecord record = new TransactionRecord(sender, recipient, amount);
         txRepo.save(record);
 
         return true;

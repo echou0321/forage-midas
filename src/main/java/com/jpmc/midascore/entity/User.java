@@ -1,20 +1,16 @@
 package com.jpmc.midascore.entity;
 
-import jakarta.persistence.*;
+// Note: This class is intentionally left as a plain POJO to avoid conflicting JPA mappings
+// with the actively used UserRecord entity. If needed in the future, move it to a different
+// package or re-enable JPA annotations with a clear migration path.
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Entity
-@Table(name = "users")
 public class User {
 
-    @Id
-    private Long id; // must match senderId/recipientId from Kafka
-
-    @Column(nullable = false, unique = true)
+    private Long id;
     private String username;
-
-    @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal balance = BigDecimal.ZERO;
 
     protected User() {
